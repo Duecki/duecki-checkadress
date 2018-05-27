@@ -255,7 +255,9 @@ for startpara in sys.argv:
         swmysqlcheck = True
     if startpara == "mysqllimit":
         mysqllimit = sys.argv[i]
-        print "SQLLimit:",mysqllimit
+
+
+print "SQLLimit:",mysqllimit
 
 #Einlesen der Configuration
 if debugmode:
