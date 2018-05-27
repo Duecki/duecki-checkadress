@@ -179,7 +179,10 @@ def mysqlcheck():
     tmp = cursor.fetchone()
     mysqljobs = tmp[0]
 
-#    SQLQUERY = ("SELECT eintrag, longitude, latitude, date, city FROM TeslaLogDB.teslatracking where city is  NULL AND longitude <> 0 AND latitude <> 0 LIMIT).mysqllimit
+    SQLQUERY = ("SELECT eintrag, longitude, latitude, date, city FROM TeslaLogDB.teslatracking where city is  NULL AND longitude <> 0 AND latitude <> 0 LIMIT %s",[mysqllimit])
+    print SQLQUERY
+
+
 #    SQLQUERY = str(SQLQUERY)
 #    print "SQLQUERY:",SQLQUERY,type(SQLQUERY)
 #    cursor.execute(SQLQUERY)
@@ -195,12 +198,10 @@ def mysqlcheck():
         }
         geoinfo = dgeoinfo(geoatri)
 
-#        geoinfo = dgeoinfo(longitude, latitude, glogin, posts)
         if debugmode:
             print "mysqlcheck.dgeofinforeturn:"
             pprint (geoinfo)
         eint = int(eintrag)
-#        print "mysqlcheck.Daten:",eintrag, longitude, ":", latitude, ":", date, "sql City: ", city, "::", "Adress",geoinfo['City'],geoinfo['Street'],geoinfo['Housenumber'],"|"
         if mysqlupdate:
             cursor.execute("""UPDATE TeslaLogDB.teslatracking SET city = %s, street = %s, housenumber = %s WHERE eintrag = %s""",[geoinfo['City'],geoinfo['Street'],geoinfo['Housenumber'],eint])
             db.commit()
