@@ -179,7 +179,7 @@ def mysqlcheck():
     tmp = cursor.fetchone()
     mysqljobs = tmp[0]
 
-    SQLQUERY = ("SELECT eintrag, longitude, latitude, date, city FROM TeslaLogDB.teslatracking where city is  NULL AND longitude <> 0 AND latitude <> 0 LIMIT %s",[mysqllimit])
+    SQLQUERY = ("SELECT eintrag, longitude, latitude, date, city FROM TeslaLogDB.teslatracking where city is  NULL AND longitude <> 0 AND latitude <> 0 LIMIT %s",(mysqllimit))
     print SQLQUERY
 
 
