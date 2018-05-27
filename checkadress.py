@@ -189,19 +189,11 @@ def mysqlcheck():
 
     format_str = """SELECT eintrag, longitude, latitude, date, city FROM TeslaLogDB.teslatracking where city is  NULL AND longitude <> 0 AND latitude <> 0 LIMIT {sqllimit};"""
     SQLQUERY = format_str.format(sqllimit=mysqllimit)
-
-    print SQLQUERY, type(SQLQUERY)
-
-
-#    SQLQUERY = str(SQLQUERY)
-#    print "SQLQUERY:",SQLQUERY,type(SQLQUERY)
     cursor.execute(SQLQUERY)
 
-    sys.exit(0)
     posts = mongoconnect()
-    cursor.execute("""SELECT eintrag, longitude, latitude, date, city FROM TeslaLogDB.teslatracking where city is  NULL AND longitude <> 0 AND latitude <> 0 LIMIT 2000""")
+#    cursor.execute("""SELECT eintrag, longitude, latitude, date, city FROM TeslaLogDB.teslatracking where city is  NULL AND longitude <> 0 AND latitude <> 0 LIMIT 2000""")
     for (eintrag, longitude, latitude, date, city) in cursor :
-
         geoatri={
             'longi':longitude,
             'lati':latitude,
