@@ -179,8 +179,18 @@ def mysqlcheck():
     tmp = cursor.fetchone()
     mysqljobs = tmp[0]
 
-    SQLQUERY = ("SELECT eintrag, longitude, latitude, date, city FROM TeslaLogDB.teslatracking where city is  NULL AND longitude <> 0 AND latitude <> 0 LIMIT %s",(mysqllimit))
-    print SQLQUERY
+
+    format_str = """INSERT INTO employee (staff_number, fname, lname, gender, birth_date)
+    VALUES (NULL, "{first}", "{last}", "{gender}", "{birthdate}");"""
+
+    sql_command = format_str.format(first=p[0], last=p[1], gender=p[2], birthdate = p[3])
+    cursor.execute(sql_command)
+
+
+    format_str = """SELECT eintrag, longitude, latitude, date, city FROM TeslaLogDB.teslatracking where city is  NULL AND longitude <> 0 AND latitude <> 0 LIMIT {sqllimit};"""
+    SQLQUERY = format_str.format(sqllimit=mysqllimit)
+
+    print SQLQUERY, type(SQLQUERY)
 
 
 #    SQLQUERY = str(SQLQUERY)
