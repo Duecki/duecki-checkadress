@@ -141,7 +141,7 @@ def mongocheck():
         print "Fehler im DB connect"
 #        sys.exit(1)
 
-    rawdata = posts.find({"shift_state":{"$exists":False}},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(500)
+    rawdata = posts.find({"shift_state":{"$exists":True}},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(500)
 
 
     for dd in rawdata:
