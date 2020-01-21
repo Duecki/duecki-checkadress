@@ -143,11 +143,15 @@ def mongocheck():
 
     rawdata = posts.find({"shift_state":{"$exists":True}},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(mongoupdatelimit)
 
-
+    i = 0
     for dd in rawdata:
+        if i = 0:
+            i = 1
+            endKM = dd['KMstand']
+
         if drive and dd['shift_state'] == "D":
             posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "run"}})
-        elif dd['shift_state'] == "D" or float(startKM) > float(endKM):
+        elif dd['shift_state'] == "D" or float(dd['KMstand']) > float(endKM):
             ## START
             trippnumber = trippnumber + 1
             drive = True
