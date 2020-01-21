@@ -15,8 +15,7 @@ def mongoconnect():
     mongoconnect = MongoClient(mongoDB_SERVER, mongoDB_PORT)
     mdb = mongoconnect.TeslaLog
     mdb.authenticate(mongoDB_USER,mongoDB_PWD)
-    posts = mdb.posts
-    logbook_clone = mdb.logbook_clone
+    posts = mdb.logbook_clone
     print "Mongoconnect:",time.time() - start
     return(posts)
 
@@ -135,14 +134,12 @@ def mongocheck():
     global mongoupdates
     print "mongocheck.start"
     try:
-        posts = mongoconnect()
+        posts = mongoconnect("logbook_clone")
     except:
         print "Fehler im DB connect"
 #        sys.exit(1)
 
-
-
-    rawdata = logbook_clone.find({},{"_id":1,"messZeit":1,"shift_state":1}).sort("_id",1).limit(500)
+    rawdata = posts.find({},{"_id":1,"messZeit":1,"shift_state":1}).sort("_id",1).limit(500)
 
 
     for dd in rawdata:
