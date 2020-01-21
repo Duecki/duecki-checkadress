@@ -162,7 +162,7 @@ def mongocheck():
             try:
                 dauer = dd['messZeit'] - startZeit
                 print "Dauer1: ",dauer,
-                print "Dauer:  ", dauer.Stunde, ":", dauer.Minute
+                print "Dauer:  ", dauer.hour, ":", dauer.minute
             except:
                 print " "
             print "------------------------------------"
