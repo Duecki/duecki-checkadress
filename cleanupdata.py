@@ -145,8 +145,8 @@ def mongocheck():
     for dd in rawdata:
         if dd['shift_state'] == "D":
             print "-------fahrt"
-            print "Zeit",dd['messZeit']
-
+            print "Zeit:",dd['messZeit']
+            print "ID:  ",dd['_id']
 
     sys.exit()
 
