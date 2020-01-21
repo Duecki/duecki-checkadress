@@ -147,7 +147,7 @@ def mongocheck():
     for dd in rawdata:
         if drive and dd['shift_state'] == "D":
             posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "run"}})
-        elif dd['shift_state'] == "D":
+        elif dd['shift_state'] == "D" or float(startKM) > float(endKM):
             ## START
             trippnumber = trippnumber + 1
             drive = True
