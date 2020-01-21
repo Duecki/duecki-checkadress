@@ -133,7 +133,7 @@ def mongocheck():
     global googlerequestcount
     global mongoupdates
     drive = False
-    driveno = 0
+    trippnumber = 0
     print "mongocheck.start"
     try:
         posts = mongoconnect()
@@ -141,34 +141,47 @@ def mongocheck():
         print "Fehler im DB connect"
 #        sys.exit(1)
 
-    rawdata = posts.find({"shift_state":{"$exists":True}},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(50000)
+    rawdata = posts.find({"shift_state":{"$exists":True}},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(500)
 
 
     for dd in rawdata:
         prevdd = dd
         if drive and dd['shift_state'] == "D":
-            a=0
+            posts.update_one({'_id': dd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "run"}})
         elif dd['shift_state'] == "D":
-            driveno = driveno + 1
+            trippnumber = trippnumber + 1
             drive = True
             startKM = float(prevdd['KMstand'])
             startZeit = dd['messZeit']
+            startID = prevdd['_id']
+            posts.update_one({'_id': prevdd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "start"}})
+            posts.update_one({'_id': dd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "run"}})
+
             print "Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand']
             #print "ID:        ",dd['_id']
         elif drive and dd['shift_state'] != "D":
             drive = False
             distanz = float(dd['KMstand']) - startKM
-            print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "Driveno:", driveno,
+            posts.update_one({'_id': dd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "end"}})
+            print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "trippnumber:", trippnumber,
             try:
                 dauer = dd['messZeit'] - startZeit
-                print "type: ", type(dauer), "--",
-                print "Dauer1: ",dauer,
-                print "Dauer:  ", dauer.hour, ":", dauer.minute
+                print "Dauer: ",dauer
             except:
                 print " "
             print "------------------------------------"
+
+
         else:
             drive = False
+
+        try:
+            if mongoupdate:
+                posts.update_one({'_id': dd['_id']}, {"$set": { "Street": geoinfo["Street"], "City": geoinfo["City"], "Housenumber": geoinfo["Housenumber"], "updated": True}})
+                mongoupdates += 1
+        except:
+            print "!!!!Fehlerausgabe"
+
 
 
     sys.exit()
