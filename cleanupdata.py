@@ -141,7 +141,7 @@ def mongocheck():
         print "Fehler im DB connect"
 #        sys.exit(1)
 
-    rawdata = posts.find({"shift_state":{"$exists":True}},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(500)
+    rawdata = posts.find({"shift_state":{"$exists":True}},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(50000)
 
 
     for dd in rawdata:
@@ -152,11 +152,15 @@ def mongocheck():
             driveno = driveno + 1
             drive = True
             startKM = float(prevdd['KMstand'])
-            print "Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand'], "ID:        ",dd['_id']
+            startZeit = dd['messZeit']
+            print "Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand']
+            #print "ID:        ",dd['_id']
         elif drive and dd['shift_state'] != "D":
             drive = False
             distanz = float(dd['KMstand']) - startKM
-            print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "Driveno:",driveno, "ID:        ",dd['_id']
+            print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "Driveno:"
+            try:
+                print "Dauer: ",dd['messZeit'] - startZeit
             print "------------------------------------"
         else:
             drive = False
