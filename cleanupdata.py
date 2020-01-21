@@ -16,6 +16,7 @@ def mongoconnect():
     mdb = mongoconnect.TeslaLog
     mdb.authenticate(mongoDB_USER,mongoDB_PWD)
     posts = mdb.posts
+    logbook_clone = mdb.logbook_clone
     print "Mongoconnect:",time.time() - start
     return(posts)
 
@@ -141,7 +142,7 @@ def mongocheck():
 
 
 
-    rawdata = mongoDB_COLLECTION.find({},{"_id":1,"messZeit":1,"shift_state":1}).sort("_id",1).limit(500)
+    rawdata = logbook_clone.find({},{"_id":1,"messZeit":1,"shift_state":1}).sort("_id",1).limit(500)
 
 
     for dd in rawdata:
@@ -297,7 +298,7 @@ mongoDB_DATENBANK = getTeslaconf['mongoDB_DATENBANK']
 mongoDB_USER = getTeslaconf['mongoDB_USER']
 mongoDB_PWD = getTeslaconf['mongoDB_PWD']
 mongoDB_PORT = int(getTeslaconf['mongoDB_PORT'])
-mongoDB_COLLECTION = getTeslaconf['mongoDB_COLLECTION']
+# nicht implementiert: mongoDB_COLLECTION = getTeslaconf['mongoDB_COLLECTION']
 glogin = getTeslaconf['glogin']
 
 
