@@ -141,7 +141,7 @@ def mongocheck():
         print "Fehler im DB connect"
 #        sys.exit(1)
 
-    rawdata = posts.find({"shift_state":{"$exists":True}},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(500)
+    rawdata = posts.find({"shift_state":{"$exists":True}},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(mongoupdatelimit)
 
 
     for dd in rawdata:
@@ -154,7 +154,6 @@ def mongocheck():
             startKM = float(prevdd['KMstand'])
             startZeit = dd['messZeit']
             startID = prevdd['_id']
-            print "prevdd:", prevdd['_id'], "--"
             posts.update_one({'_id': prevdd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "start"}})
             posts.update_one({'_id': dd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "run"}})
 
@@ -271,6 +270,7 @@ mysqlupdate = True
 askgoogle = False
 data = []
 mysqllimit = 10
+mongoupdatelimit = 10
 googlerequestcount = 0
 mysqlupdates = 0
 mongoupdates = 0
@@ -290,6 +290,7 @@ else:
     print "mongocheck"
     print "mysqlcheck"
     print "mysqllimit <Wert>"
+    print "mongoupdatelimit <Wert>"
     print "\n\n"
 
 i = 0
@@ -303,6 +304,9 @@ for startpara in sys.argv:
         swmysqlcheck = True
     if startpara == "mysqllimit":
         mysqllimit = sys.argv[i]
+    if startpara == "mongoupdatelimit":
+        mongoupdatelimit = sys.argv[i]
+
 
 
 print "SQLLimit:",mysqllimit
