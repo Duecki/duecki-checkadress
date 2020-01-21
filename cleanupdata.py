@@ -305,7 +305,7 @@ for startpara in sys.argv:
     if startpara == "mysqllimit":
         mysqllimit = sys.argv[i]
     if startpara == "mongoupdatelimit":
-        mongoupdatelimit = sys.argv[i]
+        mongoupdatelimit = int(sys.argv[i])
 
 
 
