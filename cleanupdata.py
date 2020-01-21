@@ -145,15 +145,16 @@ def mongocheck():
 
 
     for dd in rawdata:
-        prevdd = dd
         if drive and dd['shift_state'] == "D":
             posts.update_one({'_id': dd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "run"}})
         elif dd['shift_state'] == "D":
+            ## START
             trippnumber = trippnumber + 1
             drive = True
             startKM = float(prevdd['KMstand'])
             startZeit = dd['messZeit']
             startID = prevdd['_id']
+            print "prevdd:", prevdd['_id'], "--"
             posts.update_one({'_id': prevdd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "start"}})
             posts.update_one({'_id': dd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "run"}})
 
@@ -170,10 +171,9 @@ def mongocheck():
             except:
                 print " "
             print "------------------------------------"
-
-
         else:
             drive = False
+        prevdd = dd
 
 
     sys.exit()
