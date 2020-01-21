@@ -142,13 +142,11 @@ def mongocheck():
 
     rawdata = posts.find({},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(500)
 
-    print "Type: ",type(rawdata)
 
     for dd in rawdata:
-        print "Type in for:",type(dd)
         prevdd = dd
         if drive and dd['shift_state'] == "D":
-            print "d"
+            a=0
         elif dd['shift_state'] == "D":
             startKM = prevdd['KMstand']
             print "Startzeit: ",dd['messZeit']
