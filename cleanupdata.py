@@ -175,14 +175,6 @@ def mongocheck():
         else:
             drive = False
 
-        try:
-            if mongoupdate:
-                posts.update_one({'_id': dd['_id']}, {"$set": { "Street": geoinfo["Street"], "City": geoinfo["City"], "Housenumber": geoinfo["Housenumber"], "updated": True}})
-                mongoupdates += 1
-        except:
-            print "!!!!Fehlerausgabe"
-
-
 
     sys.exit()
 
