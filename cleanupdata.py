@@ -145,7 +145,7 @@ def mongocheck():
 
     i = 0
     for dd in rawdata:
-        if i = 0:
+        if i == 0:
             i = 1
             endKM = dd['KMstand']
 
