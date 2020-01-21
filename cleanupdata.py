@@ -133,6 +133,7 @@ def mongocheck():
     global googlerequestcount
     global mongoupdates
     drive = False
+    driveno = 0
     print "mongocheck.start"
     try:
         posts = mongoconnect()
@@ -148,15 +149,14 @@ def mongocheck():
         if drive and dd['shift_state'] == "D":
             a=0
         elif dd['shift_state'] == "D":
-            startKM = float(prevdd['KMstand'])
-            print "Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand']
-            print "ID:        ",dd['_id']
+            driveno = driveno + 1
             drive = True
+            startKM = float(prevdd['KMstand'])
+            print "Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand'], "ID:        ",dd['_id']
         elif drive and dd['shift_state'] != "D":
             drive = False
             distanz = float(dd['KMstand']) - startKM
-            print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz
-            print "ID:        ",dd['_id']
+            print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "Driveno:",driveno, "ID:        ",dd['_id']
             print "------------------------------------"
         else:
             drive = False
