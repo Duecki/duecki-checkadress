@@ -147,6 +147,7 @@ def mongocheck():
     for dd in rawdata:
         if i == 0:
             i = 1
+            print "set first endKM"
             endKM = dd['KMstand']
 
         if drive and dd['shift_state'] == "D":
@@ -164,7 +165,10 @@ def mongocheck():
             if trippnumber != 1:
 #                print "-- start:",startKM, "  endKM:",endKM
                 if float(startKM) > float(endKM):
-                    print "OBACHT! Delta:", float(startKM) - float(endKM), "Zeit:", dd['messZeit'], "-------------------------------"
+                    print " "
+                    print "OBACHT! Delta:", startKM - endKM, "Zeit:", dd['messZeit'], "-------------------------------"
+                    print " "
+
 
             print trippnumber, " Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand'],
             #print "ID:        ",dd['_id']
@@ -173,7 +177,7 @@ def mongocheck():
             drive = False
             distanz = float(dd['KMstand']) - startKM
             posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "end"}})
-            endKM = dd['KMstand']
+            endKM = float(dd['KMstand'])
             print "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz,
             try:
                 dauer = dd['messZeit'] - startZeit
