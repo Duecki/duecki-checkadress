@@ -134,7 +134,7 @@ def mongocheck():
     global mongoupdates
     print "mongocheck.start"
     try:
-        posts = mongoconnect("logbook_clone")
+        posts = mongoconnect()
     except:
         print "Fehler im DB connect"
 #        sys.exit(1)
