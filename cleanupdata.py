@@ -160,7 +160,7 @@ def mongocheck():
             if trippnumber != 1:
                 print "-- start:",startKM, "  endKM:",endKM
                 if float(startKM) > float(endKM):
-                    print "OBACHT! Delta:", startKM - endKM, "Zeit:", dd['messZeit'], "-------------------------------"
+                    print "OBACHT! Delta:", float(startKM) - float(endKM), "Zeit:", dd['messZeit'], "-------------------------------"
 
             print trippnumber, " Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand'],
             #print "ID:        ",dd['_id']
