@@ -160,7 +160,8 @@ def mongocheck():
             distanz = float(dd['KMstand']) - startKM
             print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "Driveno:",
             try:
-                print "Dauer: ",dd['messZeit'] - startZeit, float(dd['messZeit']) - float(startZeit)
+                dauer = dd['messZeit'] - startZeit
+                print "Dauer:", dd['messZeit'].Stunde, ":", dd['messZeit'].Minute,
             except:
                 print " "
             print "------------------------------------"
