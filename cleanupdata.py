@@ -140,12 +140,15 @@ def mongocheck():
 #        sys.exit(1)
 
 
-    rawdata = mongoDB_COLLECTION.find({},{"_id":1,"messZeit":1,"shift_state":1}).sort({"_id":1}).limit(500)
+
+    rawdata = mongoDB_COLLECTION.find({},{"_id":1,"messZeit":1,"shift_state":1}).sort("_id",1).limit(500)
 
 
     for dd in rawdata:
-        if dd['shift_state'] == "D":
-            print "fahrt"
+        pprint (dd['shift_state'])
+
+        #if dd['shift_state'] == "D":
+        #    print "fahrt"
 
 
 
