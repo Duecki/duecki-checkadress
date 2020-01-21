@@ -157,19 +157,18 @@ def mongocheck():
             posts.update_one({'_id': prevdd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "start"}})
             posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "run"}})
 
-            print "Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand'],
+            print trippnumber, " Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand'],
             #print "ID:        ",dd['_id']
         elif drive and dd['shift_state'] != "D":
             drive = False
             distanz = float(dd['KMstand']) - startKM
             posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "end"}})
-            print "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "trippnumber:", trippnumber,
+            print "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz,
             try:
                 dauer = dd['messZeit'] - startZeit
                 print "Dauer: ",dauer
             except:
                 print " "
-            print "------------------------------------"
         else:
             drive = False
         prevdd = dd
