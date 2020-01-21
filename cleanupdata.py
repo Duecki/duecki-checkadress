@@ -139,14 +139,27 @@ def mongocheck():
         print "Fehler im DB connect"
 #        sys.exit(1)
 
-    rawdata = posts.find({},{"_id":1,"messZeit":1,"shift_state":1}).sort("_id",1).limit(500)
+    rawdata = posts.find({},{"_id":1,"messZeit":1,"KMstand":1,"shift_state":1}).sort("_id",1).limit(500)
 
+    print "Type: ",type(rawdata)
 
     for dd in rawdata:
-        if dd['shift_state'] == "D":
-            print "-------fahrt"
-            print "Zeit:",dd['messZeit']
+        print "Type in for:",type(dd)
+        prevdd = dd
+        if drive and dd['shift_state'] == "D":
+            print "d"
+        elif dd['shift_state'] == "D":
+            print "Startzeit: ",dd['messZeit']
+            print "StartKM:   ",prevdd['KMstand']
             print "ID:  ",dd['_id']
+            drive = True
+        elif drive and dd['shift_state'] != "D":
+            drive = False
+            print "Endzeit: ",dd['messZeit']
+            print "EndKM:   ",dd['KMstand']
+        else:
+            drive = False
+
 
     sys.exit()
 
