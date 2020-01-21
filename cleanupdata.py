@@ -145,8 +145,8 @@ def mongocheck():
     for dd in rawdata:
         pprint (dd['shift_state'])
 
-        #if dd['shift_state'] == "D":
-        #    print "fahrt"
+        if dd['shift_state'] == "D":
+            print "-------fahrt"
 
 
 
