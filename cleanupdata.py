@@ -161,7 +161,7 @@ def mongocheck():
             print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "Driveno:",
             try:
                 dauer = dd['messZeit'] - startZeit
-                print "Dauer:", dd['messZeit'].Stunde, ":", dd['messZeit'].Minute,
+                print "Dauer:", dauer.Stunde, ":", dauer.Minute,
             except:
                 print " "
             print "------------------------------------"
