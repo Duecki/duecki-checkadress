@@ -146,7 +146,7 @@ def mongocheck():
 
     for dd in rawdata:
         if drive and dd['shift_state'] == "D":
-            posts.update_one({'_id': dd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "run"}})
+            posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "run"}})
         elif dd['shift_state'] == "D":
             ## START
             trippnumber = trippnumber + 1
@@ -154,16 +154,16 @@ def mongocheck():
             startKM = float(prevdd['KMstand'])
             startZeit = dd['messZeit']
             startID = prevdd['_id']
-            posts.update_one({'_id': prevdd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "start"}})
-            posts.update_one({'_id': dd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "run"}})
+            posts.update_one({'_id': prevdd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "start"}})
+            posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "run"}})
 
-            print "Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand']
+            print "Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand'],
             #print "ID:        ",dd['_id']
         elif drive and dd['shift_state'] != "D":
             drive = False
             distanz = float(dd['KMstand']) - startKM
-            posts.update_one({'_id': dd['_id']}, {"$set": { "trippnumber": trippnumber, "trippstatus": "end"}})
-            print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "trippnumber:", trippnumber,
+            posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "end"}})
+            print "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "trippnumber:", trippnumber,
             try:
                 dauer = dd['messZeit'] - startZeit
                 print "Dauer: ",dauer
