@@ -148,7 +148,7 @@ def mongocheck():
         if i == 0:
             i = 1
             print "set first endKM"
-            endKM = dd['KMstand']
+            endKM = float(dd['KMstand'])
 
         if drive and dd['shift_state'] == "D":
             posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "run"}})
