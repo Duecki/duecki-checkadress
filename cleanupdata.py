@@ -161,6 +161,8 @@ def mongocheck():
             print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "Driveno:"
             try:
                 print "Dauer: ",dd['messZeit'] - startZeit
+            except:
+                print "keine Zeitberechnung"
             print "------------------------------------"
         else:
             drive = False
