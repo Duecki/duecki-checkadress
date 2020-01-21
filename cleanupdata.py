@@ -165,7 +165,8 @@ def mongocheck():
 
             if trippnumber != 1:
 #                print "-- start:",startKM, "  endKM:",endKM
-                if float(startKM) > float(endKM):
+                tdelta = float(startKM) - float(endKM)
+                if tdelta > 5:
                     print " "
                     print "OBACHT! Delta:", startKM - endKM, "Zeit:", dd['messZeit'], "-------------------------------"
                     print " "
