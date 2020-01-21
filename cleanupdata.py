@@ -132,6 +132,7 @@ def dgeoinfo(args):
 def mongocheck():
     global googlerequestcount
     global mongoupdates
+    drive = False
     print "mongocheck.start"
     try:
         posts = mongoconnect()
