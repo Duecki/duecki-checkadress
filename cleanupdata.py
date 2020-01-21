@@ -157,7 +157,7 @@ def mongocheck():
             posts.update_one({'_id': prevdd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "start"}})
             posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "run"}})
 
-            if startKM > endKM:
+            if startKM > endKM and trippnumber != 1:
                 print "OBACHT! Delta:", startKM - endKM, "Zeit:", dd['messZeit'], "-------------------------------"
 
             print trippnumber, " Startzeit: ",dd['messZeit'], "StartKM:   ",prevdd['KMstand'],
