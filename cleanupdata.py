@@ -158,11 +158,11 @@ def mongocheck():
         elif drive and dd['shift_state'] != "D":
             drive = False
             distanz = float(dd['KMstand']) - startKM
-            print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "Driveno:"
+            print "Endzeit:   ",dd['messZeit'], "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz, "Driveno:",
             try:
-                print "Dauer: ",dd['messZeit'] - startZeit
+                print "Dauer: ",dd['messZeit'] - startZeit, float(dd['messZeit']) - float(startZeit)
             except:
-                print "keine Zeitberechnung"
+                print " "
             print "------------------------------------"
         else:
             drive = False
