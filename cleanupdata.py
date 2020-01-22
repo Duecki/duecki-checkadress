@@ -15,7 +15,10 @@ def mongoconnect():
     mongoconnect = MongoClient(mongoDB_SERVER, mongoDB_PORT)
     mdb = mongoconnect.TeslaLog
     mdb.authenticate(mongoDB_USER,mongoDB_PWD)
-    posts = mdb.logbook_clone
+#    posts = mdb.logbook_clone
+    test = "logbook_clone"
+    posts = mdb.test
+
     print "Mongoconnect:",time.time() - start
     return(posts)
 
