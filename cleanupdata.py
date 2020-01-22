@@ -74,7 +74,7 @@ def mongocheck():
             ## END
             drive = False
             distanz = float(dd['KMstand']) - startKM
-            posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "end"}})
+            posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "end", "due_trippdistanz", distanz}})
             mongoupdates += 1
             endKM = float(dd['KMstand'])
             print "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz,
@@ -229,6 +229,7 @@ if swmysqlcheck:
     print "mysqlcheck noch nicht vorhanden"
 #    mysqlcheck()
 
+print ""
 print "Googleanfragen:", googlerequestcount
 print "mysqljobs:",mysqljobs
 print "monogupdates:",mongoupdates
