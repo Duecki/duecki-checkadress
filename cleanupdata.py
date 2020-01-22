@@ -20,113 +20,6 @@ def mongoconnect():
     return(posts)
 
 
-#def dgeoinfo(longi, lati, glogin ,posts):
-def dgeoinfo(args):
-    global googlerequestcount
-    if debugmode:
-        print "dgeoinfo:"
-        print "dgeoinfo.inputinfos: ",args['longi'],type(longi), args['lati'], type(args['lati']), args['glogin'], type(args['glogin'])
-    longi = float(args['longi'])
-    lati = float(args['lati'])
-    if debugmode:
-        print "dgeoinfo.Infos.afterfloatchange: ",args['longi'],type(args['longi']), args['lati'], type(args['lati']), glogin, type(args['glogin'])
-
-
-#    posts = mongoconnect()
-#    if debugmode:
-#        print "########","latitude",lati,type(lati),"longitude",longi,type(longi)
-#    ausgabe = posts.find_one({"latitude":lati,"longitude":longi,"Housenumber": {"$exists": True}},{"Housenumber":1,"Street":1,"City":1})
-#    print "dgeoinfo.mongoausgabe",
-#    if debugmode:
-#        pprint (ausgabe)
-
-    if False:
-        #Kopie der Zeien zum Debugen
-        posts = mongoconnect()
-        mongorequest = ({"latitude":lati,"longitude":longi,"Housenumber": {"$exists": True}},{"Housenumber":1,"Street":1,"City":1})
-        print "\n\nMongorequest::",mongorequest
-        ausgabe = posts.find_one({"latitude":lati,"longitude":longi,"Housenumber": {"$exists": True}},{"Housenumber":1,"Street":1,"City":1})
-        if debugmode:
-#            print "dgeoinfo.geofrom:Mongo",ausgabe['City'],ausgabe['Street'],
-            pprint (ausgabe)
-#            sys.exit(2)
-            if ausgabe['City']:
-                print "dgeoinfo.mongoCity:",ausgabe['City'],
-            if ausgabe['Street']:
-                print "dgeoinfo.mongoStreet:",ausgabe['Street'],
-            if ausgabe['Housenumber']:
-                print "dgeoinfo.mongoHousenumber:",ausgabe['Housenumber'],
-
-    try:
-        ausgabe = posts.find_one({"latitude":args['lati'],"longitude":args['longi'],"Housenumber": {"$exists": True}},{"Housenumber":1,"Street":1,"City":1})
-        if debugmode:
-            print "dgeoinfo.geofrom:Mongo",ausgabe['City'],ausgabe['Street']
-            if ausgabe['City']:
-                print "dgeoinfo.mongoCity:",ausgabe['City']
-            if ausgabe['Street']:
-                print "dgeoinfo.mongoStreet:",ausgabe['Street']
-            if ausgabe['Housenumber']:
-                print "dgeoinfo.mongoHousenumber:",ausgabe['Housenumber']
-
-
-        if ausgabe['City'] and ausgabe['Street'] and ausgabe['Housenumber']:
-            print "dgeoinfo.geofrom:Mongo::",ausgabe['City'],ausgabe['Street']
-            return(ausgabe)
-    except:
-        try:
-            posts = mongoconnect()
-            ausgabe = posts.find_one({"latitude":args['lati'],"longitude":args['longi'],"Housenumber": {"$exists": True}},{"Housenumber":1,"Street":1,"City":1})
-            if ausgabe['City'] and ausgabe['Street'] and ausgabe['Housenumber']:
-                print "dgeoinfo.geofrom:Mongo2::",ausgabe['City'],ausgabe['Street']
-                return(ausgabe)
-        except:
-            print"",
-#    sys.exit(0)
-
-    try:
-        gmaps = googlemaps.Client(key=args['glogin'])
-        georesult = gmaps.reverse_geocode((args['lati'], args['longi']))
-        googlerequestcount += 1
-        i = 0
-        city=""
-        street=""
-        housenumber="-"
-        zip=""
-        country=""
-        for geocomp in georesult[0]['address_components']:
-        	for geotype in geocomp['types']:
-        		if geotype == 'locality':
-        			city = georesult[0]['address_components'][i]['long_name']
-        		if geotype == 'route':
-        			street = georesult[0]['address_components'][i]['long_name']
-        		if geotype == 'street_number':
-        			housenumber = georesult[0]['address_components'][i]['long_name']
-        		if geotype == 'postal_code':
-        			zip = georesult[0]['address_components'][i]['long_name']
-        		if geotype == 'country':
-        			country = georesult[0]['address_components'][i]['long_name']
-        	i+=1
-
-        geo = {
-            'longitude':args['longi'],
-            'latitude':args['lati'],
-        	'City':city,
-        	'Street':street,
-        	'Housenumber':housenumber,
-        	'zip':zip,
-        	'Country':country,
-            'geoinfoonly':True
-        }
-        print "dgeoinfo.geofrom:google",geo['City'],geo['Street'],"HN:",geo['Housenumber'],type(geo['Housenumber'])
-    	post_id = posts.insert_one(geo)
-    	if debugmode:
-    		print "dgeoinfo.Eintrag in MongoDB"
-    		print "dgeoinfo.Rückgabewert nach Eintrag post_id:",post_id
-
-        return(geo)
-    except:
-        print "Fehler in der geoauflösung"
-
 
 
 def mongocheck():
@@ -152,16 +45,19 @@ def mongocheck():
 
         if drive and dd['shift_state'] == "D":
             posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "run"}})
+            mongoupdates += 1
         elif dd['shift_state'] == "D":
 #        elif float(dd['KMstand']) > endKM and not drive:
             ## START
-            trippnumber = trippnumber + 1
+            trippnumber += 1
             drive = True
             startKM = float(prevdd['KMstand'])
             startZeit = dd['messZeit']
             startID = prevdd['_id']
             posts.update_one({'_id': prevdd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "start"}})
+            mongoupdates += 1
             posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "run"}})
+            mongoupdates += 1
 
             if trippnumber != 1:
 #                print "-- start:",startKM, "  endKM:",endKM
@@ -179,6 +75,7 @@ def mongocheck():
             drive = False
             distanz = float(dd['KMstand']) - startKM
             posts.update_one({'_id': dd['_id']}, {"$set": { "due_trippnumber": trippnumber, "due_trippstatus": "end"}})
+            mongoupdates += 1
             endKM = float(dd['KMstand'])
             print "EndKM:     ",dd['KMstand'], "Distanz:   ",distanz,
             try:
@@ -191,35 +88,9 @@ def mongocheck():
         prevdd = dd
 
 
-    sys.exit()
-
-####  alter Teil
-
-    repairs = posts.find({"City":{"$exists":False}},{"longitude":1,"latitude":1,"messZeit":1,"City":1}).count()
-    ausgabe = posts.find({"City":{"$exists":False}},{"_id":1,"longitude":1,"latitude":1,"messZeit":1,"City":1}).limit(100)
-    print "Zu korrigierende Werte:",repairs
-
-    for dd in ausgabe:
-        print "\n\nmongocheck.for_ausgabe:",
-        geoatri={
-            'longi':dd['longitude'],
-            'lati':dd['latitude'],
-            'glogin':glogin,
-            'posts':posts
-        }
-        geoinfo = dgeoinfo(geoatri)
-#        geoinfo = dgeoinfo(dd["longitude"],dd["latitude"],glogin,posts)
-        try:
-            if mongoupdate:
-                posts.update_one({'_id': dd['_id']}, {"$set": { "Street": geoinfo["Street"], "City": geoinfo["City"], "Housenumber": geoinfo["Housenumber"], "updated": True}})
-                mongoupdates += 1
-        except:
-            print "!!!!Fehlerausgabe"
-
 
 
 def mysqlcheck():
-    global googlerequestcount
     global mysqlupdates
     global mysqljobs
     if debugmode:
