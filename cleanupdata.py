@@ -217,6 +217,7 @@ def mongocheck():
             print "!!!!Fehlerausgabe"
 
 
+
 def mysqlcheck():
     global googlerequestcount
     global mysqlupdates
@@ -345,7 +346,7 @@ mongoDB_PWD = getTeslaconf['mongoDB_PWD']
 mongoDB_PORT = int(getTeslaconf['mongoDB_PORT'])
 # nicht implementiert: mongoDB_COLLECTION = getTeslaconf['mongoDB_COLLECTION']
 glogin = getTeslaconf['glogin']
- 
+
 
 startzeit = time.time()
 if swmongocheck:
